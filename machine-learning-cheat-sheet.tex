@@ -49,13 +49,26 @@
 
 % ----------
 \section{Regression}
-  $\mathcal{D}$ is a set of Training examples, the n-th Training Example ($n = 1,2, ..., N$), of this set is: $\bf{x}_n = \begin{bmatrix} \quad x_{n1} \quad x_{n2} \quad ... \quad x_{nD} \end{bmatrix} $
+  We have a set of $N$ training examples of dimensionality $D$, e.g:
+  
+  $x_n = \begin{bmatrix} x_{n1} \quad x_{n2} \quad ... \quad x_{nD} \end{bmatrix}^T $
 
-  The goal is to predict a $\hat{y}$ given a $\bf{x}$.
+  We often put the examples into one matrix with extra column of $1$s:
+
+  $ \widetilde{X} = \begin{bmatrix}
+    1 \quad x_{11} \quad x_{12} \quad \ldots \quad x_{1D} \\
+    \ldots\\
+    1 \quad x_{N1} \quad x_{N2} \quad \ldots \quad x_{ND}
+  \end{bmatrix}
+  $
+
+  (note that $x_n$ are rows, not columns)
+
+  The goal is to predict a $\hat{y}$ given $x$.
 
   Simple linear regression: $y_n \approx \beta_0 + \beta_1 x_{n1}$
 
-  Multiple linear regression: $y_n \approx f(\bf{x}_n) := \beta_0 + \beta_1 x_{n1} + \beta_2 x_{n2} + ... + \beta_D x_{nD}$
+  Multiple dimension linear regression: $y_n \approx f(x^*) := \beta_0 + \beta_1 x^*_{1} + \beta_2 x^*_{2} + ... + \beta_D x^*_{D}$
 
   \subsection{Linear basis function model}
   $y_n = \beta_0 + \sum_{i=1}^{M} \beta_i \phi_i(\bf{x_n}) =  \bf{\widetilde\phi^T}(\bf{x}^T_n) \boldsymbol\beta$.
@@ -92,26 +105,20 @@
 
 \todo[inline]{TODO: statistical/computational tradeoff}
 
-\section{Grid Search}
-  Complexity: $\mathcal{O}(M^D N D)$, where $M$ is the number of points in one dimension.
-
 % ----------
 \section{Gradient Descent}
   General rule: $\boldsymbol\beta^{(k+1)} = \boldsymbol\beta^{(k)} - \alpha \frac{\partial \mathcal{L}(\boldsymbol\beta^{(k)})}{\partial \boldsymbol\beta}$
 
-  Complexity: $\mathcal{O}(I N D)$ where $I$ is the number of iterations we take.
-
-  Big questions are how to get a good $\alpha$.
+  How to get a good $\alpha$ is a hard question (too small gives slow time, too big may not converge).
 
   The gradient for MSE comes out as:
   $\frac{\partial \mathcal{L}}{\partial \boldsymbol\beta} = - \frac{1}{N} \widetilde{X}^T ( \boldsymbol y - \widetilde{X} \boldsymbol\beta )$
 
 % ----------
 \section{Normal equations}
-  Complexity: $\mathcal{O}(ND^2 + D^3)$
-
   $\beta = ( \widetilde{X}^T \widetilde{X} )^{-1} \widetilde{X}^T y$
 
+  Works for $\widetilde{X}$ having $rank = D$ (so that inverse is defined)
 % ----------
 \section{Classification}
   Logistic Function $\sigma = \frac{exp(x)}{1+exp(x)}$
@@ -145,6 +152,8 @@ Jensen's inequality (log is \textbf{concave}): $log(\frac{\sum_{i=1}^n x_i}{n}) 
 
 Hessian is positive semidefinite $\Rightarrow$ function is convex.
 
+Positive semidefinite matrix $M \Leftrightarrow$ Gram matrix (inner product) $\Leftrightarrow \forall_x x^T M x \ge 0$.
+
 \subsection{Difficult words}
 \textbf{consistent} estimator converges to the true value as we increase the
 number of data to infinity.
@@ -160,7 +169,14 @@ number of data to infinity.
 
 % ----------
 \section{Complexities}
-\todo[inline]{todo: extract all complexities}
+Grid search: $\mathcal{O}(M^D N D)$, where $M$ is the number of test points in one dimension.
+
+Gradient descent: $\mathcal{O}(I N D)$ where $I$ is the number of iterations we make.
+
+Least-squares (normal equations): $\mathcal{O}(ND^2 + D^3)$
+
+Newton's method (with Hessian): $\mathcal{O}(ND^2 + D^3)$
+
 % ----------
 \section{Bias-Variance Decomposition}
   \begin{colfig}
@@ -242,7 +258,7 @@ number of data to infinity.
 % ---------- Footer
 \hrule
 \tiny
-Rendered \today. Written by Dennis Meier.
+Rendered \today. Written by Dennis Meier, Jakub Sygnowski.
 \copyright Dennis Meier. This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
 To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/ or
 send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
