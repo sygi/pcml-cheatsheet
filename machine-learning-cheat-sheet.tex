@@ -20,7 +20,7 @@
   /Title (Machine Learning Cheat Sheet)
   /Creator (TeX)
   /Producer (pdfTeX 1.40.0)
-  /Author (Dennis Meier)
+  /Author (Dennis Meier, Jakub Sygnowski)
   /Subject (Machine Learning cheatsheet)
   /Keywords (machinelearning, ml, bayes, regression, classification)
 }
@@ -48,14 +48,6 @@
 \end{center}
 
 % ----------
-\section{General}
-  Gaussian distribution: $\mathcal{N}(X| \mu, \sigma^2)$ \\
-  $\implies p(X = x) = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp{(- \frac{1}{2} ( \frac{x - \mu}{\sigma} )^2)}$
-
-  Poisson distribution: $\mathcal{P}(X| \lambda)$ \\
-  $\implies p(X = k) = \frac{\lambda ^ k}{k!} \exp{(- \lambda)}$
-
-% ----------
 \section{Regression}
   $\mathcal{D}$ is a set of Training examples, the n-th Training Example ($n = 1,2, ..., N$), of this set is: $\bf{x}_n = \begin{bmatrix} \quad x_{n1} \quad x_{n2} \quad ... \quad x_{nD} \end{bmatrix} $
 
@@ -66,10 +58,10 @@
   Multiple linear regression: $y_n \approx f(\bf{x}_n) := \beta_0 + \beta_1 x_{n1} + \beta_2 x_{n2} + ... + \beta_D x_{nD}$
 
   \subsection{Linear basis function model}
-  $y_n = \beta_0 + \sum_{i=1}^{M} \beta_i \phi_i(\bf{x_n}) =  \bf{\tilde\phi^T}(\bf{x}^T_n) \boldsymbol\beta$.
-  The optimal $\beta$ is given by $\beta = ( \tilde{\Phi}^T \tilde{\Phi})^{-1} \tilde{\Phi}^T y$ where $\tilde{\Phi}$ is a matrix with N rows and the n-th row is $[1, \phi_1(x_n)^T,  ...,  \phi_M(x_n)^T]$.
+  $y_n = \beta_0 + \sum_{i=1}^{M} \beta_i \phi_i(\bf{x_n}) =  \bf{\widetilde\phi^T}(\bf{x}^T_n) \boldsymbol\beta$.
+  The optimal $\beta$ is given by $\beta = ( \widetilde{\Phi}^T \widetilde{\Phi})^{-1} \widetilde{\Phi}^T y$ where $\widetilde{\Phi}$ is a matrix with N rows and the n-th row is $[1, \phi_1(x_n)^T,  ...,  \phi_M(x_n)^T]$.
 
-  Ridge regression: $\beta_{ridge} = ( \tilde{\boldsymbol \Phi}^T \tilde{\boldsymbol\Phi} + \lambda \boldsymbol I)^{-1} \tilde{\boldsymbol\Phi}^T \boldsymbol y$
+  Ridge regression: $\beta_{ridge} = ( \widetilde{\boldsymbol \Phi}^T \widetilde{\boldsymbol\Phi} + \lambda \boldsymbol I)^{-1} \widetilde{\boldsymbol\Phi}^T \boldsymbol y$
 
   \subsection{Cost functions}
   \begin{colfig}
@@ -101,7 +93,7 @@
 \todo[inline]{TODO: statistical/computational tradeoff}
 
 \section{Grid Search}
-  Complexity: $\mathcal{O}(M^D N D)$, where $M$ is the number of grids in one dimension.
+  Complexity: $\mathcal{O}(M^D N D)$, where $M$ is the number of points in one dimension.
 
 % ----------
 \section{Gradient Descent}
@@ -112,13 +104,13 @@
   Big questions are how to get a good $\alpha$.
 
   The gradient for MSE comes out as:
-  $\frac{\partial \mathcal{L}}{\partial \boldsymbol\beta} = - \frac{1}{N} \tilde{X}^T ( \boldsymbol y - \tilde{X} \boldsymbol\beta )$
+  $\frac{\partial \mathcal{L}}{\partial \boldsymbol\beta} = - \frac{1}{N} \widetilde{X}^T ( \boldsymbol y - \widetilde{X} \boldsymbol\beta )$
 
 % ----------
-\section{Least squares}
+\section{Normal equations}
   Complexity: $\mathcal{O}(ND^2 + D^3)$
 
-  $\beta = ( \tilde{X}^T \tilde{X} )^{-1} \tilde{X}^T y$
+  $\beta = ( \widetilde{X}^T \widetilde{X} )^{-1} \widetilde{X}^T y$
 
 % ----------
 \section{Classification}
@@ -129,7 +121,7 @@
   to $\mathcal{C_1}$ if $y < 0.5$.
 
   \subsection{Logistic Regression}
-  $\tilde{\bf{X}}^T [\sigma(\tilde{\bf{X}} \beta) - y] = 0$
+  $\widetilde{\bf{X}}^T [\sigma(\widetilde{\bf{X}} \beta) - y] = 0$
   \todo[inline]{TODO: Generalized Linear model}
 
   \subsection{Cost functions}
@@ -143,7 +135,32 @@
 % ----------
 \section{Occam's Razor}
   It states that among competing hypotheses, the one with the fewest assumptions should be selected. Other, more complicated solutions may ultimately prove correct, but—in the absence of certainty—the fewer assumptions that are made, the better.
+% ----------
+\section{Math}
+convexity: 
 
+$\forall_{x_1, x_2} \forall_{t\in[0,1]} f(tx_1 + (1-t)x_2) \le tf(x_1) + (1-t)f(x_2)$
+
+Jensen's inequality (log is \textbf{concave}): $log(\frac{\sum_{i=1}^n x_i}{n}) \ge \frac{\sum_{i=1}^n log(x_i)}{n}$
+
+Hessian is positive semidefinite $\Rightarrow$ function is convex.
+
+\subsection{Difficult words}
+\textbf{consistent} estimator converges to the true value as we increase the
+number of data to infinity.
+
+\textbf{unidentifiable} model has many global minima due to symmetry.
+
+\subsection{Distributions}
+  Gaussian: $\mathcal{N}(X| \mu, \sigma^2)$ \\
+  $\implies p(X = x) = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp{(- \frac{1}{2} ( \frac{x - \mu}{\sigma} )^2)}$
+
+  Poisson: $\mathcal{P}(X| \lambda)$ \\
+  $\implies p(X = k) = \frac{\lambda ^ k}{k!} \exp{(- \lambda)}$
+
+% ----------
+\section{Complexities}
+\todo[inline]{todo: extract all complexities}
 % ----------
 \section{Bias-Variance Decomposition}
   \begin{colfig}
@@ -156,7 +173,7 @@
     \hline
     regularization          & +    & - \\
     reduce model complexity & +    & - \\
-    more data               & -    & \\
+    more data               & -    & - \\
     \hline
   \end{tabular}
 
@@ -218,7 +235,7 @@
   Search for the hyperplane separating the data such that the gap is biggest.
   It minimizes the following cost function:
 
-  $\mathcal{L}_{SVM} (\bf{\beta})= \sum_{n=1}^N [1 - y_n \tilde\phi_n \beta]_{+} + \frac{\lambda}{2} \sum_{j=1}^M \beta_j^2$
+  $\mathcal{L}_{SVM} (\bf{\beta})= \sum_{n=1}^N [1 - y_n \widetilde\phi_n \beta]_{+} + \frac{\lambda}{2} \sum_{j=1}^M \beta_j^2$
 
   This is convex but not differentiable.
 
